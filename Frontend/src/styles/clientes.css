@@ -1,0 +1,60 @@
+.clientes-subitems {
+  background: #f8f9fc;
+  padding: 20px;
+  border-radius: 0 0 16px 16px;
+  border-top: 2px solid #eef2fa;
+}
+
+.clientes-subitems h4 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #5b6475;
+  font-size: 0.95rem;
+}
+
+.subitems-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+}
+
+.subitems-table th {
+  background: #eef2fa;
+  padding: 10px;
+  font-size: 0.8rem;
+  text-align: left;
+  color: #5b6475;
+}
+
+.subitems-table td {
+  padding: 10px;
+  border-bottom: 1px solid #eef1f7;
+  font-size: 0.85rem;
+}
+
+.badge-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e9ecef;
+  color: #5b6475;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.row--active {
+  background-color: #f8faff;
+}
+
+
+.sale-table td[data-label="Total"] {
+  font-size: 1rem;
+  text-align: right;
+  padding-right: 20px;
+}

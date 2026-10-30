@@ -1,0 +1,641 @@
+
+.sale-form {
+  --primary: #1d5fc9;
+  --primary-dark: #154a9e;
+  --navy: #0c447c;
+  --success: #17803f;
+  --danger: #b42318;
+  --text: #1b2433;
+  --muted: #5b6475;
+  --border: #d3dae8;
+  --line: #e6eaf2;
+  --soft: #f4f7fd;
+  --card: #ffffff;
+  font-family: 'Poppins', system-ui, sans-serif;
+  color: var(--text);
+}
+
+.sale-form *,
+.sale-form *::before,
+.sale-form *::after {
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   Tarjeta contenedora del form
+   --------------------------------------------------------- */
+.sale-form {
+  background: var(--card);
+  padding: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.sale-form h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.sale-form h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------
+   Header del form (título + fecha + cerrar)
+   --------------------------------------------------------- */
+.sale-form__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 16px;
+}
+
+.sale-form__head-right {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.sale-form .date-field,
+.sale-form .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.sale-form .date-field input {
+  width: 170px;
+}
+
+.sale-form .field input,
+.sale-form .date-field input {
+  font-size: 0.92rem;
+}
+
+/* ---------------------------------------------------------
+   Layout general del form (main + side)
+   --------------------------------------------------------- */
+.sale-form__layout {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .sale-form__layout {
+    grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr);
+  }
+}
+
+.sale-form__main {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------
+   Inputs genéricos
+   --------------------------------------------------------- */
+.sale-form input:not([type='radio']) {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  min-height: 44px;
+  width: 100%;
+  min-width: 0;
+  padding: 0 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.sale-form input:focus-visible {
+  outline: 3px solid rgba(29, 95, 201, 0.25);
+  border-color: var(--primary);
+}
+
+.sale-form input[type='number'] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.sale-form input[type='number']::-webkit-inner-spin-button,
+.sale-form input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------
+   Section title + badge contador
+   --------------------------------------------------------- */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.count-badge {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: #e8f0fd;
+  color: var(--primary-dark);
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------
+   Lista de productos (filas)
+   --------------------------------------------------------- */
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 132px 130px 100px 44px;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.item-row__subtotal {
+  text-align: right;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.item-row__remove {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--danger);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-row__remove:hover:not(:disabled) {
+  background: #fdecea;
+}
+
+.item-row__remove:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ---------------------------------------------------------
+   Stepper (cantidad)
+   --------------------------------------------------------- */
+.stepper {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.stepper button {
+  flex: 0 0 38px;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepper button:hover {
+  background: #eef3fd;
+}
+
+.sale-form .stepper input {
+  border: 0;
+  border-radius: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 0;
+  text-align: center;
+  font-weight: 600;
+}
+
+.sale-form .stepper input:focus-visible {
+  outline: none;
+  background: #f2f6fe;
+}
+
+/* ---------------------------------------------------------
+   Money input ($ prefijo)
+   --------------------------------------------------------- */
+.money-input {
+  position: relative;
+  display: block;
+}
+
+.money-input span {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+
+.sale-form .money-input input {
+  padding-left: 28px;
+}
+
+/* ---------------------------------------------------------
+   Botón "Agregar otro producto"
+   --------------------------------------------------------- */
+.add-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 46px;
+  width: 100%;
+  border: 1.5px dashed #aebbd6;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--primary);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.add-item:hover {
+  background: var(--soft);
+  border-color: var(--primary);
+}
+
+/* ---------------------------------------------------------
+   Panel lateral (método de pago + tarjeta + total)
+   --------------------------------------------------------- */
+.sale-form__side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 1.8rem;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  min-width: 0;
+  align-self: start;
+  position: sticky;
+  top: 16px;
+}
+
+@media (max-width: 900px) {
+  .sale-form__side {
+    position: static;
+  }
+}
+
+.sale-form fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.sale-form legend {
+  display: block;
+  padding: 0;
+  margin-bottom: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sale-form__side legend {
+  margin-bottom: 8px;
+}
+
+.sale-form__card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+/* ---------------------------------------------------------
+   Chips (radios estilizados)
+   --------------------------------------------------------- */
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sale-form .chip {
+  position: relative;
+  display: inline-flex;
+}
+
+.sale-form .chip input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.chip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.chip input:checked + span {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.chip input:focus-visible + span {
+  outline: 3px solid rgba(29, 95, 201, 0.35);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------
+   Total a cobrar
+   --------------------------------------------------------- */
+.total-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: var(--navy);
+  color: #fff;
+  margin-top: 4px;
+  box-shadow: 0 4px 14px rgba(12, 68, 124, 0.18);
+}
+
+.total-box span {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.total-box strong {
+  font-size: 1.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* ---------------------------------------------------------
+   Botones dentro del form
+   --------------------------------------------------------- */
+.sale-form .btn {
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 22px;
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  color: #fff;
+  background: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.15s;
+}
+
+.sale-form .btn:hover {
+  filter: brightness(0.93);
+}
+
+.sale-form .btn:focus-visible {
+  outline: 3px solid rgba(29, 95, 201, 0.4);
+  outline-offset: 2px;
+}
+
+.sale-form .btn--success {
+  background: var(--success);
+}
+
+.sale-form .btn--lg {
+  min-height: 52px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.sale-form .btn--ghost {
+  background: transparent;
+  color: var(--muted);
+}
+
+.sale-form .btn--ghost:hover {
+  background: #e9eef8;
+  filter: none;
+}
+
+.sale-form .btn--icon {
+  width: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: #eef1f7;
+  color: var(--text);
+}
+
+.sale-form .btn--danger-icon {
+  background: #fdecea;
+  color: var(--danger);
+}
+
+.sale-form__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.sale-form__actions .btn--lg {
+  width: 100%;
+}
+
+.sale-form__actions .btn--lg:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* =========================================================
+   MODAL DE EDICIÓN
+   ========================================================= */
+.sale-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  font-family: 'Poppins', system-ui, sans-serif;
+  color: #1b2433;
+}
+
+.sale-modal *,
+.sale-modal *::before,
+.sale-modal *::after {
+  box-sizing: border-box;
+}
+
+.sale-modal--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sale-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.sale-modal--open .sale-modal__backdrop {
+  opacity: 1;
+}
+
+.sale-modal__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1000px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  border-radius: 20px;
+  transform: translateY(24px) scale(0.98);
+  opacity: 0;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.22s ease;
+}
+
+.sale-modal--open .sale-modal__content {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.sale-modal__content .sale-form {
+  margin: 0;
+  max-width: 100%;
+  box-shadow: none;
+}
+
+/* =========================================================
+   RESPONSIVE (form + modal)
+   ========================================================= */
+@media (max-width: 640px) {
+  /* Fila de producto en dos líneas */
+  .item-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .item-row__name {
+    grid-column: 1 / -1;
+  }
+
+  .item-row__subtotal {
+    text-align: left;
+  }
+
+  .item-row__remove {
+    justify-self: end;
+  }
+
+  /* Fecha y header apilados */
+  .sale-form .date-field input {
+    width: 100%;
+  }
+
+  .sale-form__head-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .sale-form .date-field {
+    flex: 1;
+  }
+
+  .sale-form__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Acciones en una columna */
+  .sale-form__actions {
+    grid-template-columns: 1fr;
+  }
+
+  .sale-form__actions .btn--lg:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+
+  /* Modal como hoja inferior */
+  .sale-modal {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .sale-modal__content {
+    max-height: 92vh;
+    border-radius: 20px 20px 0 0;
+  }
+}

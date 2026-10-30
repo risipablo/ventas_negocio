@@ -1,0 +1,10 @@
+
+Lista de productos
+
+Marca = brand (string)
+tipo de mascota = pets => gato perro mixto
+edad = age
+unidad = kg (string )
+condicion = conditions
+precio = price
+categoria = category

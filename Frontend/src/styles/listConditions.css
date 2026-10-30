@@ -1,0 +1,73 @@
+/* =========================================================
+   Colores por condición del producto
+   Efectivo = azul · No actualizado = ámbar · Discontinuado = rojo
+   ========================================================= */
+.sale-master {
+  --cash: #1858bf;          --cash-bg: #c5d5e7;          --cash-hover: #a2c0e8;          --cash-pill: #dbeafe;          --cash-text: #1e40af;
+  --outdated: #d99100;      --outdated-bg: #fff8e6;      --outdated-hover: #ffefc2;      --outdated-pill: #fdecc0;      --outdated-text: #8a5a00;
+  --discontinued: #e5342f;  --discontinued-bg: #fdeeed;  --discontinued-hover: #fbdcda;  --discontinued-pill: #fbd5d2;  --discontinued-text: #b42318;
+  --selected-bg: #dfeafd;   --selected: #1d5fc9;
+}
+
+/* ---------- Filas ---------- */
+.sale-master .sale-table tbody tr td:first-child { box-shadow: none; }
+
+.sale-master .sale-table tbody tr.row--cash td          { background: var(--cash-bg); }
+.sale-master .sale-table tbody tr.row--outdated td      { background: var(--outdated-bg); }
+.sale-master .sale-table tbody tr.row--discontinued td  { background: var(--discontinued-bg); }
+
+.sale-master .sale-table tbody tr.row--cash td:first-child          { box-shadow: inset 4px 0 0 var(--cash); }
+.sale-master .sale-table tbody tr.row--outdated td:first-child      { box-shadow: inset 4px 0 0 var(--outdated); }
+.sale-master .sale-table tbody tr.row--discontinued td:first-child  { box-shadow: inset 4px 0 0 var(--discontinued); }
+
+/* Hover: el mismo color, un poco más intenso */
+.sale-master .sale-table tbody tr.row--cash:hover td          { background: var(--cash-hover); }
+.sale-master .sale-table tbody tr.row--outdated:hover td      { background: var(--outdated-hover); }
+.sale-master .sale-table tbody tr.row--discontinued:hover td  { background: var(--discontinued-hover); }
+
+/* Seleccionada (modo selección): gana sobre el color de condición */
+.sale-master .sale-table tbody tr.row--selected td,
+.sale-master .sale-table tbody tr.row--selected:hover td { background: var(--selected-bg); }
+.sale-master .sale-table tbody tr.row--selected td:first-child { box-shadow: inset 4px 0 0 var(--selected); }
+
+.sale-master .sale-table tbody tr.row-selectable { cursor: pointer; }
+
+/* ---------- Etiqueta de condición ---------- */
+.cond-pill {
+  display: inline-block; padding: 4px 12px; border-radius: 999px;
+  font-size: 0.75rem; font-weight: 600; white-space: nowrap;
+}
+.cond-pill--cash          { background: var(--cash-pill);          color: var(--cash-text); }
+.cond-pill--outdated      { background: var(--outdated-pill);      color: var(--outdated-text); }
+.cond-pill--discontinued  { background: var(--discontinued-pill);  color: var(--discontinued-text); }
+.cond-text-none { color: #7a8396; font-size: 0.85rem; }
+
+/* ---------- Barra superior ---------- */
+.list-loading { padding: 4rem 0; text-align: center; }
+
+.list-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px 20px; margin-bottom: 1rem;
+}
+.list-toolbar__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.list-toolbar__delete { display: inline-flex; align-items: center; gap: 8px; }
+.list-toolbar__icon { margin-right: 8px; }
+
+.col-check { width: 40px; text-align: center; }
+
+/* ---------- Referencia de colores ---------- */
+.cond-legend {
+  display: flex; flex-wrap: wrap; gap: 6px 16px;
+  margin: 0; padding: 0; list-style: none;
+  font-size: 0.8rem; color: #5b6475;
+}
+.cond-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.cond-dot { width: 10px; height: 10px; border-radius: 50%; }
+.cond-dot--cash          { background: var(--cash); }
+.cond-dot--outdated      { background: var(--outdated); }
+.cond-dot--discontinued  { background: var(--discontinued); }
+
+@media (max-width: 640px) {
+  .list-toolbar { flex-direction: column; align-items: stretch; }
+  .list-toolbar__actions .btn { flex: 1 1 auto; }
+}
