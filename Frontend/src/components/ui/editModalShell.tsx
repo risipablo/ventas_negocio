@@ -1,6 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
 import { X } from 'lucide-react';
-import "../../styles/editModal.css"
+import "../../styles/editmodal.css"
 
 interface ShellProps {
   isOpen: boolean;

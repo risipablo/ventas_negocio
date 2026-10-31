@@ -4,7 +4,7 @@ import { useSearch } from '../../../hooks/useSearch';
 import { SearchInput } from '../../../components/ui/searchInput';
 import { LogoSpinner } from '../../../components/ui/spinner';
 import { ModalConfirm } from '../../../components/ui/modalConfirm';
-import '../../../styles/carritoGuardado.css';
+import '../../../styles/carritoguardado.css';
 import { useCarritosGuardados, type ICarritoGuardado } from '../hooks/useCarritoGuardado';
 import { EditCarritoModal } from './editCarrito';
 

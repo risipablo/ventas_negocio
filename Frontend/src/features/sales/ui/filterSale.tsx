@@ -1,7 +1,7 @@
       import { useCallback, useEffect, useMemo, useState } from 'react';
       import { X, ChevronDown, CalendarDays, CalendarCheck2 } from 'lucide-react';
       import type { Sale, PaymentMethod } from '../types/sale.types';
-      import '../../../styles/filterSales.css';
+      import '../../../styles/filtersales.css';
       import { Tooltip } from '@mui/material';
 
       interface Props {

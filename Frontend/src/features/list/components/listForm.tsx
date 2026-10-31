@@ -1,7 +1,7 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { IList } from '../types/type.list';
-import '../../../styles/formList.css';
+import '../../../styles/formlist.css';
 
 interface Props {
   isOpen: boolean;
