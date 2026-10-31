@@ -3,7 +3,7 @@ import { CalendarDays, ChevronDown, X, DollarSign, Receipt, Calculator } from 'l
 import {
   Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
-import '../../styles/filterSales.css';
+import '../../styles/filtersales.css';
 import '../../styles/stats.css';
 import type { IGasto } from '../gastos/types/gastos.types';
 import {

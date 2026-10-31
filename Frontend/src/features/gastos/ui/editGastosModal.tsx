@@ -1,7 +1,7 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { X } from 'lucide-react';
 import type { IGasto, EstadoGasto } from '../types/gastos.types';
-import '../../../styles/formList.css';
+import '../../../styles/formlist.css';
 
 interface Props {
   isOpen: boolean;

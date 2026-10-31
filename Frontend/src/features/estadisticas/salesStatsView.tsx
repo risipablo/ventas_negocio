@@ -7,7 +7,7 @@ import {
   Search, CalendarDays, X, ChevronDown, BarChart2, TrendingUp, DollarSign,
   ListOrdered, ArrowUpRight, ArrowDownRight,
 } from 'lucide-react';
-import '../../styles/filterSales.css';
+import '../../styles/filtersales.css';
 import '../../styles/stats.css';
 import type { PaymentMethod, Sale } from '../sales/types/sale.types';
 import { useSalesStats } from './hooks/useSaleStats';

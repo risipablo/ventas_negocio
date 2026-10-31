@@ -6,7 +6,7 @@ import {
   BarChart, Bar, Cell, CartesianGrid, ResponsiveContainer, Tooltip, Legend,
   XAxis, YAxis, ReferenceLine,
 } from 'recharts';
-import '../../styles/filterSales.css';
+import '../../styles/filtersales.css';
 import '../../styles/stats.css';
 import type { Sale } from '../sales/types/sale.types';
 import type { IGasto } from '../gastos/types/gastos.types';

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { X, ChevronDown, CalendarDays } from 'lucide-react';
 import type { IGasto } from '../types/gastos.types';
-import '../../../styles/filterSales.css';
+import '../../../styles/filtersales.css';
 import { Tooltip } from '@mui/material';
 
 interface Props {
