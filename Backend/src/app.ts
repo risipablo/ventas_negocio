@@ -43,6 +43,7 @@ class App {
           'http://localhost:5174',
           'http://localhost:5175',
           'http://localhost:5176',
+          'https://ventas-negocio.onrender.coms'
         ],
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
