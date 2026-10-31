@@ -43,7 +43,8 @@ class App {
           'http://localhost:5174',
           'http://localhost:5175',
           'http://localhost:5176',
-          'https://ventas-negocio.onrender.coms'
+          'https://ventas-negocio.onrender.com',
+          'https://ventas-negocio-bay.vercel.app'
         ],
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
