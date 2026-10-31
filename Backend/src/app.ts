@@ -11,6 +11,8 @@ import clientesRoutes from './modules/clientes/cliente.routes'
 import proveedoresRoutes from './modules/proveedores/proveedores.route'
 import carritoRoutes from './modules/carrito/carrito.routes'
 import notaRoutes from './modules/notas/nota.route'
+import archivoRoutes from './modules/archivo/archivo.route';
+import path from 'path';
 import errorHandler from './middlewares/errorMiddleware';
 import { env } from './config/env';
 
@@ -63,6 +65,7 @@ class App {
     this.app.use('/api/proveedors', proveedoresRoutes)
     this.app.use('/api/carritos', carritoRoutes)
     this.app.use('/api/notas', notaRoutes)
+     this.app.use('/api/archivos', archivoRoutes);
     
     this.app.get('/api/health', (_req: Request, res: Response) => {
       res.json({ status: 'ok', timestamp: new Date().toISOString() });
@@ -77,6 +80,7 @@ class App {
         path: req.path,
       });
     });
+    this.app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
     this.app.use(errorHandler);
 

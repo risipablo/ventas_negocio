@@ -22,7 +22,7 @@ const parseMoney = (s: string): number | null => {
   return Number.isFinite(n) ? n : null;
 };
 
-/** Porcentajes y kilos: decimales con coma o punto (7,5 · 7.5) */
+
 const parseDecimal = (s: string): number | null => {
   const t = s.trim().replace(/\s/g, '').replace(',', '.');
   if (!t) return null;
@@ -43,7 +43,7 @@ const asText = (n: number) => String(n).replace('.', ',');
 
 type Mode = 'add' | 'remove';
 
-/* ---------- Piezas reutilizables ---------- */
+
 
 const Field = ({
   label, prefix, suffix, value, onChange, placeholder,

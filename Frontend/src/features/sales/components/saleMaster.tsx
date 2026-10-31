@@ -1,15 +1,19 @@
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, CheckSquare } from 'lucide-react';
 import type { SaleMasterProps } from '../types/sale.types';
 import { formatDate } from '../utils/dateUtils';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { ModalConfirm } from '../../../components/ui/modalConfirm';
 import { LogoSpinner } from '../../../components/ui/spinner';
 import { Paginate } from '../../../components/ui/paginate';
-import "../../../styles/spinner.css"
+import '../../../styles/spinner.css';
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const money = (n: number) => `$${n.toLocaleString('es-AR')}`;
 const ITEMS_PER_PAGE = 12;
+
+interface ExtendedProps extends SaleMasterProps {
+  onBulkDelete?: (ids: string[]) => Promise<void>;
+}
 
 export const SaleMaster = ({
   sales,
@@ -18,16 +22,15 @@ export const SaleMaster = ({
   error,
   onEdit,
   onDelete,
-}: SaleMasterProps) => {
+  onBulkDelete,
+}: ExtendedProps) => {
   const [showModal, setShowModal] = useState(false);
-  const [deleteAction, setDeleteAction] = useState<(() => Promise<void>) | null>(null);
-  const [modalConfig, setModalConfig] = useState({
-    title: "",
-    message: "",
-    confirmText: ""
-  });
+  const [itemToDelete, setItemToDelete] = useState<string | string[] | null>(null);
   const [minTimePassed, setMinTimePassed] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -44,28 +47,53 @@ export const SaleMaster = ({
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentSales = filterSales.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  const openDeleteModal = (
-    action: () => Promise<void>,
-    title: string,
-    message: string,
-    confirmText: string
-  ) => {
-    setDeleteAction(() => action);
-    setModalConfig({ title, message, confirmText });
-    setShowModal(true);
-  };
-
   const confirmModal = async () => {
-    if (deleteAction) {
+    if (itemToDelete) {
       try {
-        await deleteAction();
+        if (Array.isArray(itemToDelete)) {
+          if (onBulkDelete) {
+            await onBulkDelete(itemToDelete);
+          } else {
+            for (const id of itemToDelete) {
+              if (onDelete) await onDelete(id);
+            }
+          }
+          setSelectedItems([]);
+          setIsSelecting(false);
+        } else {
+          if (onDelete) await onDelete(itemToDelete);
+        }
       } catch (error) {
         console.error("Error al eliminar:", error);
       } finally {
         setShowModal(false);
-        setDeleteAction(null);
+        setItemToDelete(null);
       }
     }
+  };
+
+  const openDeleteModal = (idOrIds: string | string[]) => {
+    setItemToDelete(idOrIds);
+    setShowModal(true);
+  };
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedItems(currentSales.map((sale) => sale._id as string).filter(Boolean));
+    } else {
+      setSelectedItems([]);
+    }
+  };
+
+  const handleSelectItem = (id: string) => {
+    setSelectedItems((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectMode = () => {
+    setIsSelecting(!isSelecting);
+    setSelectedItems([]);
   };
 
   if (loading || !minTimePassed) {
@@ -98,6 +126,30 @@ export const SaleMaster = ({
 
   return (
     <div className="sale-master">
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+        {isSelecting ? (
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button className="btn btn--outline" onClick={toggleSelectMode}>
+              Cancelar Selección
+            </button>
+            <button
+              className="btn btn--danger"
+              onClick={() => openDeleteModal(selectedItems)}
+              disabled={selectedItems.length === 0}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+            >
+              <Trash2 size={16} />
+              Eliminar ({selectedItems.length})
+            </button>
+          </div>
+        ) : (
+          <button className="btn btn--outline" onClick={() => setIsSelecting(true)}>
+            <CheckSquare size={16} style={{ marginRight: '8px' }} />
+            Seleccionar Ventas
+          </button>
+        )}
+      </div>
+
       <div
         className="table-scroll"
         role="region"
@@ -107,6 +159,15 @@ export const SaleMaster = ({
         <table className="sale-table">
           <thead>
             <tr>
+              {isSelecting && (
+                <th style={{ width: '40px', textAlign: 'center' }}>
+                  <input
+                    type="checkbox"
+                    onChange={handleSelectAll}
+                    checked={currentSales.length > 0 && selectedItems.length === currentSales.length}
+                  />
+                </th>
+              )}
               <th>Fecha</th>
               <th>Producto</th>
               <th>Cantidad</th>
@@ -122,11 +183,22 @@ export const SaleMaster = ({
 
           {currentSales.map((sale) => {
             const rows = sale.items.length;
+            const isSelected = selectedItems.includes(sale._id as string);
 
             return (
               <tbody key={sale._id}>
                 {sale.items.map((item, index) => (
-                  <tr key={`${sale._id}-${index}`}>
+                  <tr key={`${sale._id}-${index}`} className={isSelected ? 'row--active' : ''}>
+                    {index === 0 && isSelecting && (
+                      <td rowSpan={rows} style={{ textAlign: 'center' }}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => handleSelectItem(sale._id as string)}
+                        />
+                      </td>
+                    )}
+
                     {index === 0 && (
                       <td rowSpan={rows} className="col-date">
                         {formatDate(sale.date)}
@@ -164,14 +236,7 @@ export const SaleMaster = ({
                               className="btn btn--icon btn--danger-icon"
                               aria-label="Eliminar"
                               title="Eliminar"
-                              onClick={() => openDeleteModal(
-                                async () => {
-                                  if (sale._id) await onDelete(sale._id);
-                                },
-                                "Confirmar borrado",
-                                "¿Estás seguro que deseas eliminar este producto?",
-                                "Eliminar"
-                              )}
+                              onClick={() => openDeleteModal(sale._id as string)}
                             >
                               <Trash2 size={16} />
                             </button>
@@ -188,20 +253,26 @@ export const SaleMaster = ({
         </table>
       </div>
 
-      <Paginate
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+      {totalPages > 1 && (
+        <Paginate
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
 
       {showModal && ModalConfirm && (
         <ModalConfirm
           isOpen={showModal}
           onClose={() => setShowModal(false)}
           onConfirm={confirmModal}
-          title={modalConfig.title}
-          message={modalConfig.message}
-          confirmText={modalConfig.confirmText}
+          title={Array.isArray(itemToDelete) ? 'Eliminar ventas' : 'Confirmar borrado'}
+          message={
+            Array.isArray(itemToDelete)
+              ? `¿Estás seguro que deseas eliminar las ${itemToDelete.length} ventas seleccionadas?`
+              : '¿Estás seguro que deseas eliminar esta venta?'
+          }
+          confirmText="Eliminar"
           cancelText="Cancelar"
         />
       )}
