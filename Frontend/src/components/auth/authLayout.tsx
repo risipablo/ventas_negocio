@@ -1,39 +1,34 @@
+import type { ReactNode } from 'react';
+import logo from '../../assets/logoBambina-removebg-preview.png';
+import '../../styles/auth.css';
 
-import { motion } from "framer-motion";
-import { Box } from "@mui/material";
-import type { AuthLayoutProps } from "../../features/auth/types/type.user";
+interface AuthLayoutProps {
+  title: string;
+  subtitle?: string;
+  children: ReactNode;
+}
 
 
-export const AuthLayout = ({ children, title }: AuthLayoutProps) => {
-  return (
-    <div className="login-background">
-      <motion.div
-        className="container-login"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-       
-        <Box
-          component={motion.img}
-          alt="Guita"
-          className="login-logo"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        />
+export const AuthLayout = ({ title, subtitle, children }: AuthLayoutProps) => (
+  <main className="auth-page">
+    <div className="auth-card">
+      <aside className="auth-brand">
+        <span className="auth-brand__logo">
+          <img src={logo} alt="" />
+        </span>
+        <div className="auth-brand__text">
+          <h1>Bambina Petshop</h1>
+          <p>Gestion de productos,ventas y gastos</p>
+        </div>
+      </aside>
 
-       
-        <motion.h2
-          initial={{ y: -30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          {title}
-        </motion.h2>
-
+      <section className="auth-panel">
+        <header className="auth-panel__header">
+          <h2>{title}</h2>
+          {subtitle && <p>{subtitle}</p>}
+        </header>
         {children}
-      </motion.div>
+      </section>
     </div>
-  );
-};
+  </main>
+);

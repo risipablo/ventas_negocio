@@ -5,11 +5,13 @@ import {
   LayoutDashboard, CircleDollarSign, Users, SquareText, Store, Wallet,
   ChartNoAxesColumn, CurrencyIcon, StickyNote, ListChecks, FilePlusCorner,
   ShoppingCart, LogOut, type LucideIcon,
+  User2,
 } from "lucide-react";
 import type { AuthenticatedProps } from "../../features/auth/types/type.auth";
 
 import "../../styles/navbar.css";
 import { useCart } from "../../context/useCarrito";
+import { useAuth } from "../../features/auth/hooks/useAuth";
 
 interface NavbarProps {
   setIsAuthenticated: AuthenticatedProps["setIsAuthenticated"];
@@ -51,6 +53,7 @@ const NavItem = ({ item, showTip }: { item: NavItemData; showTip: boolean }) => 
 const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { cartCount } = useCart();
+  const { logout } = useAuth();
 
 
   const [pendingNotes, setPendingNotes] = useState<number>(
@@ -71,9 +74,8 @@ const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const closeMenu = () => setIsOpen(false);
 
-  const handleLogout = () => {
-
-    setIsAuthenticated(false);
+  const handleLogout = async () => {
+    await logout();
   };
 
 
@@ -107,6 +109,7 @@ const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
         { to: '/notas', label: 'Notas', icon: StickyNote, badge: pendingNotes, badgeLabel: 'pendientes' },
         { to: '/carritos-guardados', label: 'Listas', icon: ListChecks },
         { to: '/archivos', label: 'Archivos', icon: FilePlusCorner },
+        { to: '/change-password', label: 'Perfil', icon: User2 }
       ],
     },
   ];

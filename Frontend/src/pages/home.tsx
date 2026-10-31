@@ -14,6 +14,7 @@ import { EstadisticasPage } from "./components/estadisticasPage"
 import { ConvertidorPage } from "./components/convertidorPage"
 import { DashboardPage } from "./components/dashboardPage"
 import { ArchivosView } from "../features/archivo/archivoView"
+import { ChangePasswordForm } from "./auth/changePasswordPage"
 
 
 
@@ -38,7 +39,7 @@ export const Home = ({isAuthenticated, setIsAuthenticated}:AuthenticatedProps) =
                 <Route path="/carritos-guardados" element={isAuthenticated ? <CarritosGuardadosView /> : <Navigate to="/" replace/>} />
                 <Route path="/notas" element={isAuthenticated ? <NotaPage/> : <Navigate to="/" replace/>}/>
                 <Route path="/carrito" element={isAuthenticated ? <CarritoView/> : <Navigate to="/" replace/>}/>
-
+                <Route path="/change-password" element={isAuthenticated ? <ChangePasswordForm/> : <Navigate to="/" replace/>}/>
                 <Route path="/register" element={isAuthenticated ? <RegisterPage setIsAuthenticated={setIsAuthenticated}  isAuthenticated={isAuthenticated}/> : <Navigate to="/" replace/>}/>
                 <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/"} replace/>}/>
             </Routes>

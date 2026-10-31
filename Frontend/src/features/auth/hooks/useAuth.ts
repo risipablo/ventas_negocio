@@ -42,7 +42,7 @@ export const useAuth = (): UseAuthReturn => {
       await fetchUserData();
 
       setTimeout(() => {
-        navigate('/sales');
+        navigate('/dashboard');
       }, 1000);
     } catch (err) {
       setError((err as Error).message);
@@ -51,20 +51,17 @@ export const useAuth = (): UseAuthReturn => {
       setLoading(false);
     }
   };
-
   const logout = async (): Promise<void> => {
     setLoading(true);
     try {
-      await authService.logout();
-      setUser(null);
-      localStorage.removeItem('token');
-      navigate('/login');
+      await authService.logout(); // Llamada al backend para limpiar la cookie
     } catch (err) {
-      console.error('error en logout', err);
-      localStorage.removeItem('token');
-      setUser(null);
-      navigate('/login');
+      console.error('Error en logout:', err);
     } finally {
+
+      localStorage.removeItem('token');
+      setUser(null); 
+      navigate('/login', { replace: true });
       setLoading(false);
     }
   };

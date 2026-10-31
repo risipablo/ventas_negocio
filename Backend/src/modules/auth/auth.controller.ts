@@ -151,6 +151,45 @@ export const userName = async (
   }
 };
 
+
+export const changePassword = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.user?._id;
+
+  if (!userId) {
+    res.status(401).json({ error: 'No autorizado' });
+    return;
+  }
+
+  try {
+    const user = await UserModel.findById(userId).select('+password');
+    
+    if (!user) {
+      res.status(404).json({ error: 'Usuario no encontrado' });
+      return;
+    }
+
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      res.status(401).json({ error: 'La contraseña actual es incorrecta' });
+      return;
+    }
+
+    user.password = newPassword;
+    
+    user.tokenVersion += 1;
+    
+    await user.save();
+
+    res.json({ message: 'Contraseña actualizada correctamente' });
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+};
+
 export const validateToken = async (
   req: IAuthResquest,
   res: Response
@@ -164,3 +203,4 @@ export const validateToken = async (
     },
   });
 };
+
