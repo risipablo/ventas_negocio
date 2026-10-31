@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { X, ChevronDown, CalendarDays } from 'lucide-react';
 import type { ICliente } from '../hooks/useClientes';
-import '../../../styles/filterSales.css';
+import '../../../styles/filtersales.css';
 
 interface Props {
   clientes: ICliente[];

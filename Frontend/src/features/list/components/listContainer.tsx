@@ -5,7 +5,7 @@ import { ModalConfirm } from '../../../components/ui/modalConfirm';
 import { LogoSpinner } from '../../../components/ui/spinner';
 import { Paginate } from '../../../components/ui/paginate';
 import '../../../styles/sale.css';
-import '../../../styles/listConditions.css';
+import '../../../styles/listconditions.css';
 import { EditListModal } from './editModalProduct';
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
