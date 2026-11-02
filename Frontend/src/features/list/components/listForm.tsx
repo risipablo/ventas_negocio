@@ -96,7 +96,7 @@ export const ListForm = ({
           aria-expanded={isOpen}
         >
           {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-          {isOpen ? 'Ocultar Formulario' : 'Agregar Nuevo Producto'}
+          {isOpen ?  'Agregar Nuevo Producto' : 'Ocultar Formulario'}
         </button>
       )}
 
@@ -166,8 +166,8 @@ export const ListForm = ({
             </div>
 
             <div className="pf-actions">
-              <button type="submit" className="pf-btn-add" disabled={loading}>
-                {loading ? 'Guardando...' : initialData ? 'Actualizar' : 'Agregar'}
+              <button type="submit" className="pf-btn-add" >
+                { initialData ? 'Actualizar' : 'Agregar'}
               </button>
               <button type="button" className="pf-btn-clear" onClick={handleCancel}>
                 {initialData ? 'Cancelar' : 'Limpiar'}
