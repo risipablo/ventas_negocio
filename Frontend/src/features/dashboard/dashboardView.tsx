@@ -2,15 +2,17 @@ import { useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   HelpCircle, TrendingUp, TrendingDown, Target, AlertTriangle, 
-  CheckCircle2, Trophy, Medal, StickyNote, ShoppingCart, FileText, ArrowRight, Wallet
+  CheckCircle2, Trophy, Medal, StickyNote, ShoppingCart, FileText, ArrowRight, Wallet,
+  DogIcon
 } from 'lucide-react';
 
 import '../../styles/dashboard.css';
 import { useUser } from '../auth/hooks/useUser';
 import { useSales } from '../sales/hooks/useSales';
-import { useCarritosGuardados } from '../carrito/hooks/useCarritoGuardado';
+import { useCarritosGuardados } from '../../context/useCarritoGuardadoContext';
 import { useGastos } from '../../context/gastosContext';
 import { useNotas } from '../../context/useNotaContext';
+
 
 export const DashboardView = () => {
   const { user } = useUser();
@@ -89,7 +91,7 @@ export const DashboardView = () => {
     // Top 3
     const topProductos = Object.entries(productosMap)
       .map(([name, data]) => ({ name, ...data }))
-      .sort((a, b) => b.qty - a.qty).slice(0, 3);
+      .sort((a, b) => b.total - a.total).slice(0, 3);
 
     const topProveedores = Object.entries(proveedoresMap)
       .map(([name, data]) => ({ name, ...data }))
@@ -119,7 +121,7 @@ export const DashboardView = () => {
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <h1><HelpCircle size={28} color="#8c98a8" /> Hola, {user?.name || 'Usuario'}</h1>
+        <h1><DogIcon size={28} color="#8c98a8" /> Hola, {user?.name || 'Usuario'}</h1>
         <p>Aquí están tus registros de lo que va del mes</p>
       </header>
 
@@ -244,7 +246,7 @@ export const DashboardView = () => {
         <div className="dash-card">
           <div className="section-header" style={{ justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <StickyNote size={20} color="#f59e0b" /> Notas Recientes
+              <StickyNote size={20} color="#f59e0b" /> Notas Recordatorios
             </div>
             <NavLink to="/notas" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.85rem', color: '#1d5fc9', textDecoration: 'none', fontWeight: 600 }}>
               Ver todas <ArrowRight size={14} />

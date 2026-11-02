@@ -3,7 +3,8 @@ import toast from 'react-hot-toast';
 import { Trash2, Plus, Minus, Save, ShoppingCart, X } from 'lucide-react';
 import '../../../styles/carrito.css';
 import { useCart } from '../../../context/useCarrito.tsx';
-import { useCarritosGuardados } from '../../carrito/hooks/useCarritoGuardado';
+import { useCarritosGuardados } from '../../../context/useCarritoGuardadoContext.tsx';
+
 
 const money = (n: number) => `$${n.toLocaleString('es-AR')}`;
 

@@ -7,7 +7,7 @@ import { LogoSpinner } from '../../../components/ui/spinner';
 import '../../../styles/gastos.css';
 import { formatDate } from '../../sales/utils/dateUtils';
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 8;
 const money = (n: number) => `$${n.toLocaleString('es-AR')}`;
 const cap = (s: string) => s.toUpperCase();
 

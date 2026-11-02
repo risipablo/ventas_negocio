@@ -5,8 +5,9 @@ import { SearchInput } from '../../../components/ui/searchInput';
 import { LogoSpinner } from '../../../components/ui/spinner';
 import { ModalConfirm } from '../../../components/ui/modalConfirm';
 import '../../../styles/carritoguardado.css';
-import { useCarritosGuardados, type ICarritoGuardado } from '../hooks/useCarritoGuardado';
+
 import { EditCarritoModal } from './editCarrito';
+import { useCarritosGuardados, type ICarritoGuardado } from '../../../context/useCarritoGuardadoContext';
 
 const money = (n: number) => `$${n.toLocaleString('es-AR')}`;
 
@@ -191,7 +192,9 @@ export const CarritosGuardadosView = () => {
         isOpen={!!editingItem}
         carrito={editingItem}
         onClose={() => setEditingItem(null)}
-        onUpdate={updateCarrito}
+        onUpdate={async (id, data) => {
+          await updateCarrito(id, data);
+        }}
       />
 
       {showModal && ModalConfirm && (

@@ -4,6 +4,7 @@ import { useSearch } from '../../../hooks/useSearch';
 import '../../../styles/notas.css';
 import { SearchInput } from '../../../components/ui/searchInput';
 import { useNotas, type INota } from '../../../context/useNotaContext';
+import { formatDate } from '../../sales/utils/dateUtils';
 
 export const NotasView = () => {
   const { notas, loading, addNota, updateNota, deleteNota } = useNotas();
@@ -131,7 +132,7 @@ export const NotasView = () => {
                 >
                   <td data-label="Fecha">
                     <span className="nota-text">
-                      {new Date(nota.fecha).toLocaleDateString()}
+                      {formatDate(nota.fecha)}
                     </span>
                   </td>
                   <td data-label="Título" className="nota-col-title">

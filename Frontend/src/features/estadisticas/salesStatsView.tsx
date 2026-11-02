@@ -103,7 +103,7 @@ export const SalesStatsView = ({ sales }: Props) => {
 
     const topProductsDashboard = Object.entries(productsMap)
       .map(([name, data]) => ({ name, ...data }))
-      .sort((a, b) => b.quantity - a.quantity)
+      .sort((a, b) => b.total - a.total)
       .slice(0, 5);
 
     return { totalMes, totalProductos, topProductsDashboard };
@@ -141,10 +141,7 @@ export const SalesStatsView = ({ sales }: Props) => {
   const visibleProducts = showAllProducts ? allProducts : allProducts.slice(0, PRODUCT_LIMIT);
   const productChartHeight = Math.max(220, visibleProducts.length * (isMobile ? 42 : 38) + 24);
 
-  // Comparación con el mes anterior:
-  //  - si hay un mes filtrado: ese mes vs el mes anterior a él
-  //  - si no: el mes actual vs el anterior (como calcula el hook)
-  // Respeta el buscador y el método de pago, pero compara meses completos.
+
   const filteredMonthLabel = useMemo(() => {
     if (!monthFilter) return null;
     const year = yearFilter ? Number(yearFilter) : new Date().getFullYear();

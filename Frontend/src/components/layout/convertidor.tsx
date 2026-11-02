@@ -1,16 +1,13 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Receipt, Percent, Divide, Weight, Copy, RotateCcw, type LucideIcon } from 'lucide-react';
+import { Receipt, Percent, Divide, Weight, Copy, RotateCcw, TrendingUp, type LucideIcon } from 'lucide-react';
 import '../../styles/convertidor.css';
-
-
 
 const TOAST_CONFIG = {
   position: 'top-center' as const,
   duration: 1500,
   style: { background: '#0C447C', color: '#fff' },
 };
-
 
 const parseMoney = (s: string): number | null => {
   const t = s.trim().replace(/[\s$]/g, '');
@@ -21,7 +18,6 @@ const parseMoney = (s: string): number | null => {
   const n = Number(normalized);
   return Number.isFinite(n) ? n : null;
 };
-
 
 const parseDecimal = (s: string): number | null => {
   const t = s.trim().replace(/\s/g, '').replace(',', '.');
@@ -42,8 +38,6 @@ const IVA_PRESETS = [10.5, 21, 27];
 const asText = (n: number) => String(n).replace('.', ',');
 
 type Mode = 'add' | 'remove';
-
-
 
 const Field = ({
   label, prefix, suffix, value, onChange, placeholder,
@@ -192,8 +186,6 @@ const Card = ({
   </section>
 );
 
-
-
 export function Convertidor() {
   // IVA
   const [ivaValue, setIvaValue] = useState('');
@@ -211,7 +203,11 @@ export function Convertidor() {
   const [mulValue, setMulValue] = useState('');
   const [mulKg, setMulKg] = useState('');
 
-    //   iva funciones
+  // Ganancia
+  const [ingresoValue, setIngresoValue] = useState('');
+  const [costoValue, setCostoValue] = useState('');
+
+  // Cálculos IVA
   const ivaN = parseMoney(ivaValue);
   const ivaFactor = 1 + (parseDecimal(ivaRate) ?? 0) / 100;
   const iva =
@@ -222,34 +218,40 @@ export function Convertidor() {
         : { neto: ivaN / ivaFactor, total: ivaN };
   const ivaResult = iva ? (ivaMode === 'add' ? iva.total : iva.neto) : null;
 
-    //   porcentajes
+  // Cálculos Porcentaje
   const pctN = parseMoney(pctValue);
   const pctFactor = 1 + (parseDecimal(pct) ?? 0) / 100;
   const pctResult =
     pctN === null ? null : pctMode === 'add' ? pctN * pctFactor : pctN / pctFactor;
 
-  
+  // Cálculos División
   const divN = parseMoney(divValue);
   const divK = parseDecimal(divKg);
   const divResult = divN !== null && divK !== null && divK > 0 ? divN / divK : null;
 
-  
+  // Cálculos Multiplicación
   const mulN = parseMoney(mulValue);
   const mulK = parseDecimal(mulKg);
   const mulResult = mulN !== null && mulK !== null && mulK > 0 ? mulN * mulK : null;
+
+  // Cálculo Ganancia
+  const ingresoN = parseMoney(ingresoValue);
+  const costoN = parseMoney(costoValue);
+  const gananciaResult = ingresoN !== null && costoN !== null ? ingresoN - costoN : null;
 
   const resetIva = () => { setIvaValue(''); setIvaRate('21'); setIvaMode('add'); };
   const resetPct = () => { setPctValue(''); setPct('30'); setPctMode('add'); };
   const resetDiv = () => { setDivValue(''); setDivKg(''); };
   const resetMul = () => { setMulValue(''); setMulKg(''); };
-  const resetAll = () => { resetIva(); resetPct(); resetDiv(); resetMul(); };
+  const resetGanancia = () => { setIngresoValue(''); setCostoValue(''); };
+  const resetAll = () => { resetIva(); resetPct(); resetDiv(); resetMul(); resetGanancia(); };
 
   return (
     <div className="conv-page">
       <header className="conv-header">
         <div>
           <h2>Convertidor</h2>
-          <p>Calculá IVA, porcentajes y precios por kilo. El resultado se actualiza mientras escribís.</p>
+          <p>Calculá IVA, porcentajes, precios por kilo y ganancias. El resultado se actualiza mientras escribís.</p>
         </div>
         <button type="button" className="conv-clear-all" onClick={resetAll}>
           <RotateCcw size={16} /> Limpiar todo
@@ -290,7 +292,6 @@ export function Convertidor() {
           />
         </Card>
 
-        
         <Card
           icon={Percent}
           title="Conversión con porcentaje"
@@ -325,7 +326,6 @@ export function Convertidor() {
           />
         </Card>
 
-        
         <Card
           icon={Divide}
           title="División por kg"
@@ -345,7 +345,6 @@ export function Convertidor() {
           <Result label="Precio por kg" value={divResult} />
         </Card>
 
-        
         <Card
           icon={Weight}
           title="Multiplicación por kg"
@@ -364,6 +363,20 @@ export function Convertidor() {
           />
           <Result label="Precio de la bolsa" value={mulResult} />
         </Card>
+
+        <Card
+          icon={TrendingUp}
+          title="Total de ganancia"
+          hint="Ingreso - Costo = Ganancia neta"
+          onReset={resetGanancia}
+        >
+          <div className="conv-row">
+            <Field label="Ingreso total" prefix="$" value={ingresoValue} onChange={setIngresoValue} placeholder="0,00" />
+            <Field label="Costo total" prefix="$" value={costoValue} onChange={setCostoValue} placeholder="0,00" />
+          </div>
+          <Result label="Ganancia" value={gananciaResult} />
+        </Card>
+
       </div>
     </div>
   );

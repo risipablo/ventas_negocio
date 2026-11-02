@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { X, Plus, Minus, Trash2 } from 'lucide-react';
+import { X, Plus, Minus, Trash2, CalendarMinus } from 'lucide-react';
 import type {
   CreateSalePayload,
   PaymentMethod,
@@ -12,6 +12,7 @@ import {
   inputDateToISO,
 } from '../utils/dateUtils';
 import '../../../styles/form.css';
+import sound from "../../../assets/cash.mp3"
 
 interface SaleFormProps {
   initialSale?: Sale | null;
@@ -38,6 +39,12 @@ interface DraftItem {
 }
 
 const money = (n: number) => `$${n.toLocaleString('es-AR')}`;
+
+const getYesterdayDate = () => {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  return yesterday.toISOString().slice(0, 10);
+};
 
 const emptyItem = (): DraftItem => ({
   name: '',
@@ -80,7 +87,6 @@ export const SaleForm = ({
     paymentMethod === 'credito' ||
     paymentMethod === 'qr';
 
-  // const isCard = paymentMethod === 'debito' || paymentMethod === 'credito';
   const isQr = paymentMethod === 'qr';
 
   const addItem = () => setItems((prev) => [...prev, emptyItem()]);
@@ -107,6 +113,15 @@ export const SaleForm = ({
     setNumberTarget('');
   };
 
+  const playSound = () => {
+    const audio = new Audio(sound);
+    audio.play().catch((error) => console.log('Error al reproducir sonido:', error));
+  };
+
+  const handleYesterdayDate = () => {
+    setDate(getYesterdayDate());
+  };
+
   const total = items.reduce((acc, i) => acc + i.quantity * i.unitPrice, 0);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -129,6 +144,7 @@ export const SaleForm = ({
     };
 
     try {
+      playSound();
       await onSubmit(payload);
       if (mode === 'inline' && !initialSale) clearForm();
     } catch {}
@@ -138,15 +154,26 @@ export const SaleForm = ({
     <form onSubmit={handleSubmit} className="sale-form">
       <header className="sale-form__header">
         <div className="sale-form__head-right">
-          <label className="date-field">
+          <div className="date-field" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span>Fecha</span>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              required
-            />
-          </label>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={handleYesterdayDate}
+                title="Fecha de ayer"
+                className="filter-sales__current-date"
+                style={{ marginLeft:'12px'}}
+              >
+                <CalendarMinus size={16} />
+              </button>
+            </div>
+          </div>
           {mode === 'modal' && onCancel && (
             <button
               type="button"

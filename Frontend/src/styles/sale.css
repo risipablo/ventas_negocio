@@ -169,6 +169,17 @@
   transition: background-color 0.15s ease;
 }
 
+/* Colores alternados en los td (como en la tabla anterior).
+   - Tablas con un <tbody> por venta (ventas): alterna venta por venta,
+     así todos los productos de una misma venta comparten color.
+   - Tablas con un solo <tbody> (productos, proveedores): alterna fila por fila. */
+.sale-table tbody:nth-of-type(even) td {
+  background: #f3f5fa;
+}
+.sale-table tbody:only-of-type tr:nth-child(even) td {
+  background: #f3f5fa;
+}
+
 /* Hover por producto: se resalta la fila del producto bajo el mouse,
    una por una (cada producto de una venta se marca por separado) */
 .sale-table tbody tr td {

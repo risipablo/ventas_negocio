@@ -2,7 +2,8 @@ import { useState, useEffect, type FormEvent } from 'react';
 import { X } from 'lucide-react';
 
 import '../../../styles/formlist.css';
-import type { ICarritoGuardado, ICarritoItem } from '../hooks/useCarritoGuardado';
+import type { ICarritoGuardado, ICarritoItem } from '../../../context/useCarritoGuardadoContext';
+
 
 interface Props {
   isOpen: boolean;

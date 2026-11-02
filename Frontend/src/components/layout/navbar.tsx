@@ -4,8 +4,7 @@ import { Tooltip } from "@mui/material";
 import {
   LayoutDashboard, CircleDollarSign, Users, SquareText, Store, Wallet,
   ChartNoAxesColumn, CurrencyIcon, StickyNote, ListChecks, FilePlusCorner,
-  ShoppingCart, LogOut, type LucideIcon,
-  User2,
+  ShoppingCart, LogOut, UserRound, type LucideIcon,
 } from "lucide-react";
 import type { AuthenticatedProps } from "../../features/auth/types/type.auth";
 
@@ -14,6 +13,7 @@ import { useCart } from "../../context/useCarrito.tsx";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import { useGastos } from "../../context/gastosContext";
 import { useNotas } from "../../context/useNotaContext";
+import { useCarritosGuardados } from "../../context/useCarritoGuardadoContext.tsx";
 
 interface NavbarProps {
   setIsAuthenticated: AuthenticatedProps["setIsAuthenticated"];
@@ -23,9 +23,10 @@ interface NavItemData {
   to: string;
   label: string;
   icon: LucideIcon;
-  badge?: number;      
-  badgeLabel?: string;  
+  badge?: number;       // globito rojo (0 = no se muestra)
+  badgeLabel?: string;  // para lectores de pantalla
 }
+
 
 const NavItem = ({ item, showTip }: { item: NavItemData; showTip: boolean }) => {
   const Icon = item.icon;
@@ -56,8 +57,10 @@ const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
   const { cartCount } = useCart();
   const { pendingGastosCount } = useGastos();
   const { pendingNotesCount } = useNotas();
+  const { pendingListsCount } = useCarritosGuardados();
   const { logout } = useAuth();
 
+  
   useEffect(() => {
     document.body.classList.toggle('open', isOpen);
     return () => document.body.classList.remove('open');
@@ -67,7 +70,13 @@ const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
   const closeMenu = () => setIsOpen(false);
 
   const handleLogout = async () => {
-    await logout();
+    try {
+      await logout();
+    } finally {
+      
+      localStorage.removeItem('token');
+      setIsAuthenticated(false);
+    }
   };
 
   const sections: { title: string; items: NavItemData[] }[] = [
@@ -75,13 +84,14 @@ const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
       title: 'General',
       items: [
         { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+        // { to: '/change-password', label: 'Perfil', icon: UserRound },
       ],
     },
     {
       title: 'Negocio',
       items: [
         { to: '/sales', label: 'Ventas', icon: CircleDollarSign },
-        { to: '/list', label: 'Lista de Productos', icon: SquareText },
+        { to: '/list', label: 'Productos', icon: SquareText },
         { to: '/proveedores', label: 'Proveedores', icon: Store },
         { to: '/clientes', label: 'Clientes', icon: Users },
       ],
@@ -98,9 +108,8 @@ const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
       title: 'Organización',
       items: [
         { to: '/notas', label: 'Notas', icon: StickyNote, badge: pendingNotesCount, badgeLabel: 'pendientes' },
-        { to: '/carritos-guardados', label: 'Listas', icon: ListChecks },
+        { to: '/carritos-guardados', label: 'Listas', icon: ListChecks, badge: pendingListsCount, badgeLabel: 'guardadas' },
         { to: '/archivos', label: 'Archivos', icon: FilePlusCorner },
-        { to: '/change-password', label: 'Perfil', icon: User2 }
       ],
     },
   ];
@@ -136,6 +145,7 @@ const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
         </nav>
       </div>
 
+      
       <div className="nav-footer" onClick={closeMenu}>
         <NavItem
           item={{
