@@ -10,8 +10,9 @@ import {
 import type { AuthenticatedProps } from "../../features/auth/types/type.auth";
 
 import "../../styles/navbar.css";
-import { useCart } from "../../context/useCarrito";
+import { useCart } from "../../context/useCarrito.tsx";
 import { useAuth } from "../../features/auth/hooks/useAuth";
+import { useGastos } from "../../context/gastosContext";
 
 interface NavbarProps {
   setIsAuthenticated: AuthenticatedProps["setIsAuthenticated"];
@@ -53,12 +54,15 @@ const NavItem = ({ item, showTip }: { item: NavItemData; showTip: boolean }) => 
 const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { cartCount } = useCart();
+  const {pendingGastosCount} = useGastos()
   const { logout } = useAuth();
+
 
 
   const [pendingNotes, setPendingNotes] = useState<number>(
     () => Number(localStorage.getItem('notasPendientes')) || 0
   );
+  
 
   useEffect(() => {
     const onPending = (e: Event) => setPendingNotes((e as CustomEvent<number>).detail);
@@ -98,7 +102,7 @@ const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
     {
       title: 'Finanzas',
       items: [
-        { to: '/gastos', label: 'Gastos', icon: Wallet },
+        { to: '/gastos', label: 'Gastos', icon: Wallet, badge: pendingGastosCount, badgeLabel: 'impagas' },
         { to: '/estadisticas', label: 'Estadísticas', icon: ChartNoAxesColumn },
         { to: '/convertidor', label: 'Convertidor', icon: CurrencyIcon },
       ],

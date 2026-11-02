@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
-import { useGastos } from '../hooks/useGastos';
+import { useGastos } from '../../../context/gastosContext'; 
 import { GastoContainer } from './gastosContainer';
 import { GastoForm } from './gastosForm';
 import { EditGastoModal } from '../ui/editGastosModal';
@@ -17,14 +17,12 @@ import { useStatsGastos } from '../hooks/useStatsGastos';
 export const GastoMaster = () => {
   const { gastos, loading, addGasto, updateGasto, deleteGasto } = useGastos();
   
-  
-    const { lastSaleProduct, totalMonto } = useStatsGastos(gastos, gastos);
+  const { lastSaleProduct, totalMonto } = useStatsGastos(gastos, gastos);
   
   const { query, setQuery, results } = useSearch<IGasto>(gastos, ['proveedor', 'numeroBoleta', 'estado','fecha','fechaPago','monto']);
   
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<IGasto | null>(null);
-  
   
   const [filteredGastos, setFilteredGastos] = useState<IGasto[]>([]);
 
@@ -32,7 +30,6 @@ export const GastoMaster = () => {
     await addGasto(data);
   };
 
-  
   const displayList = query.trim() 
     ? results 
     : (filteredGastos.length > 0 ? filteredGastos : gastos);
@@ -48,14 +45,13 @@ export const GastoMaster = () => {
             loading={loading}  placeholder="Buscar proveedor o boleta..." />
         </div>
 
-        
         <FilterGastos 
           gastos={gastos}
           setFilteredGastos={setFilteredGastos}
         />
 
         <GastosStats
-          lastSpend=  {lastSaleProduct}
+          lastSpend={lastSaleProduct}
           totalMonto={String(
             totalMonto.toLocaleString('es-AR', {
               minimumFractionDigits: 0,

@@ -8,8 +8,9 @@ import RegisterPage from "./pages/auth/registerPage";
 import { Home } from "./pages/home";
 import Navbar from "./components/layout/navbar";
 import { Toaster } from "react-hot-toast";
-import { NotaProvider } from "./context/useNotaContext";
-import { CarritoProvider } from "./context/useCarrito";
+import { NotasProvider } from "./context/useNotaContext";
+import { CarritoProvider } from "./context/useCarrito.tsx";
+import { GastosProvider } from "./context/gastosContext";
 
 const serverFront = config.Api;
 
@@ -44,8 +45,9 @@ function App() {
   return (
     <BrowserRouter>
       <UserProvider isAuthenticated={isAuthenticated}>
-        <CarritoProvider>
-          <NotaProvider>
+        <GastosProvider>
+          <CarritoProvider>
+          <NotasProvider>
             
             <Toaster 
               position="top-center" 
@@ -67,8 +69,10 @@ function App() {
                 <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>
             )}
-          </NotaProvider>
+          </NotasProvider>
         </CarritoProvider>
+        </GastosProvider>
+ 
       </UserProvider>
     </BrowserRouter>
   );

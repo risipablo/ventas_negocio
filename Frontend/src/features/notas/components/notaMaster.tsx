@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Search, Trash2, Pencil, CheckCircle, Undo2 } from 'lucide-react';
-
 import { useSearch } from '../../../hooks/useSearch';
 import '../../../styles/notas.css';
-import { useNotas, type INota } from '../hooks/useNota';
 import { SearchInput } from '../../../components/ui/searchInput';
+import { useNotas, type INota } from '../../../context/useNotaContext';
 
 export const NotasView = () => {
   const { notas, loading, addNota, updateNota, deleteNota } = useNotas();

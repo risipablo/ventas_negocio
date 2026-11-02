@@ -6,7 +6,7 @@ import { Paginate } from '../../../components/ui/paginate';
 
 import '../../../styles/sale.css';
 import type { IProveedor } from '../types/proveedores.type';
-import { useCart } from '../../../context/useCarrito';
+import { useCart } from '../../../context/useCarrito.tsx';
 import { EditProveedorModal } from '../ui/editProveedorModel';
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);

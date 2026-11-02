@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, type ReactNode, } from 'react';
+import { createContext, useContext, useState, useEffect, type ReactNode,  } from 'react';
 import toast from 'react-hot-toast';
 import type { IProveedor } from '../features/proveedores/types/proveedores.type';
 
@@ -19,14 +19,11 @@ interface CarritoContextType {
 const CarritoContext = createContext<CarritoContextType | undefined>(undefined);
 
 export const CarritoProvider = ({ children }: { children: ReactNode }) => {
-  
   const [cart, setCart] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('bambina_cart');
     return saved ? JSON.parse(saved) : [];
   });
 
-  
-  // Guardar en el localstorage
   useEffect(() => {
     localStorage.setItem('bambina_cart', JSON.stringify(cart));
   }, [cart]);
@@ -53,8 +50,7 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
       prev.map((p) => {
         if (p._id === id) {
           const newQ = p.quantity + delta;
-          if (newQ <= 0) return p; // No permitimos cantidad 0
-          return { ...p, quantity: newQ };
+          return newQ > 0 ? { ...p, quantity: newQ } : p;
         }
         return p;
       })
@@ -66,13 +62,14 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem('bambina_cart');
   };
 
+  
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const cartTotal = cart.reduce((acc, item) => acc + (item.precios * item.quantity), 0);
 
-  return React.createElement(
-    CarritoContext.Provider,
-    { value: { cart, addToCart, removeFromCart, updateQuantity, clearCart, cartCount, cartTotal } },
-    children
+  return (
+    <CarritoContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, cartCount, cartTotal }}>
+      {children}
+    </CarritoContext.Provider>
   );
 };
 

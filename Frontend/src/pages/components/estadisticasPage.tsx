@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { BarChart2, TrendingUp, Wallet, Scale } from 'lucide-react';
 import { useSales } from '../../features/sales/hooks/useSales';
-import { useGastos } from '../../features/gastos/hooks/useGastos';
 import { ExpensesStatsView } from '../../features/estadisticas/expensesStasView';
 import { SalesStatsView } from '../../features/estadisticas/salesStatsView';
 import { BalanceView } from '../../features/estadisticas/balanceView';
 import '../../styles/stats.css';
+import { useGastos } from '../../context/gastosContext';
 
 type TabType = 'ventas' | 'gastos' | 'balance';
 

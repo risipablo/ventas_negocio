@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import toast from 'react-hot-toast';
 import { Trash2, Plus, Minus, Save, ShoppingCart, X } from 'lucide-react';
 import '../../../styles/carrito.css';
-import { useCart } from '../../../context/useCarrito';
+import { useCart } from '../../../context/useCarrito.tsx';
 import { useCarritosGuardados } from '../../carrito/hooks/useCarritoGuardado';
 
 const money = (n: number) => `$${n.toLocaleString('es-AR')}`;

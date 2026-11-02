@@ -8,9 +8,9 @@ import {
 import '../../styles/dashboard.css';
 import { useUser } from '../auth/hooks/useUser';
 import { useSales } from '../sales/hooks/useSales';
-import { useGastos } from '../gastos/hooks/useGastos';
-import { useNotas } from '../notas/hooks/useNota';
 import { useCarritosGuardados } from '../carrito/hooks/useCarritoGuardado';
+import { useGastos } from '../../context/gastosContext';
+import { useNotas } from '../../context/useNotaContext';
 
 export const DashboardView = () => {
   const { user } = useUser();

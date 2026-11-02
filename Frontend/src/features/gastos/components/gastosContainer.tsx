@@ -88,7 +88,7 @@ export const GastoContainer = ({ list, loading, onDelete, onUpdate, onEdit }: Pr
                         </span>
                       </td>
                       <td data-label="Fecha Pago">
-                        {gasto.fechaPago ? new Date(gasto.fechaPago).toLocaleDateString() : '—'}
+                         {gasto.fechaPago ? formatDate(gasto.fechaPago) : '—'} 
                       </td>
                       <td data-label="Acciones">
                         <div className="cell-actions">
