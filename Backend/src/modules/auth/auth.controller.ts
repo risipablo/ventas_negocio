@@ -19,7 +19,7 @@ const generateToken = (user: {
       tokenVersion: user.tokenVersion,
     },
     process.env.JWT_SECRET as string,
-    { expiresIn: '3h' }
+    { expiresIn: '7d' } 
   );
 };
 
@@ -79,6 +79,7 @@ export const loginUser = async (
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+       maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
 
     res.json({

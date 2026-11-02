@@ -13,6 +13,7 @@ import "../../styles/navbar.css";
 import { useCart } from "../../context/useCarrito.tsx";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import { useGastos } from "../../context/gastosContext";
+import { useNotas } from "../../context/useNotaContext";
 
 interface NavbarProps {
   setIsAuthenticated: AuthenticatedProps["setIsAuthenticated"];
@@ -25,7 +26,6 @@ interface NavItemData {
   badge?: number;      
   badgeLabel?: string;  
 }
-
 
 const NavItem = ({ item, showTip }: { item: NavItemData; showTip: boolean }) => {
   const Icon = item.icon;
@@ -54,21 +54,9 @@ const NavItem = ({ item, showTip }: { item: NavItemData; showTip: boolean }) => 
 const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { cartCount } = useCart();
-  const {pendingGastosCount} = useGastos()
+  const { pendingGastosCount } = useGastos();
+  const { pendingNotesCount } = useNotas();
   const { logout } = useAuth();
-
-
-
-  const [pendingNotes, setPendingNotes] = useState<number>(
-    () => Number(localStorage.getItem('notasPendientes')) || 0
-  );
-  
-
-  useEffect(() => {
-    const onPending = (e: Event) => setPendingNotes((e as CustomEvent<number>).detail);
-    window.addEventListener('notas:pendientes', onPending);
-    return () => window.removeEventListener('notas:pendientes', onPending);
-  }, []);
 
   useEffect(() => {
     document.body.classList.toggle('open', isOpen);
@@ -81,7 +69,6 @@ const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
   const handleLogout = async () => {
     await logout();
   };
-
 
   const sections: { title: string; items: NavItemData[] }[] = [
     {
@@ -110,7 +97,7 @@ const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
     {
       title: 'Organización',
       items: [
-        { to: '/notas', label: 'Notas', icon: StickyNote, badge: pendingNotes, badgeLabel: 'pendientes' },
+        { to: '/notas', label: 'Notas', icon: StickyNote, badge: pendingNotesCount, badgeLabel: 'pendientes' },
         { to: '/carritos-guardados', label: 'Listas', icon: ListChecks },
         { to: '/archivos', label: 'Archivos', icon: FilePlusCorner },
         { to: '/change-password', label: 'Perfil', icon: User2 }
@@ -148,7 +135,6 @@ const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
           ))}
         </nav>
       </div>
-
 
       <div className="nav-footer" onClick={closeMenu}>
         <NavItem
