@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
 import Paper from '@mui/material/Paper';
@@ -85,15 +85,36 @@ export const SaleContainer = () => {
     await deleteSale(id);
   };
 
+  
+
+  const handleBulkDelete = async (ids: string[]) => {
+    for (const id of ids) {
+      await deleteSale(id);
+    }
+  };
+
+  
+  const displayedSales = useMemo(() => {
+    if (filterSales.length <= 1) return filterSales;
+
+    
+    const sorted = [...filterSales].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    const lastSale = sorted[0]; // La más reciente
+
+  
+    const restSales = filterSales.filter((s) => s._id !== lastSale._id);
+    return [lastSale, ...restSales];
+  }, [filterSales]);
+
   return (
     <Box className="sale-container">
       <Paper
         elevation={showCreateForm ? 4 : 1}
         sx={{
-          // borderRadius: 3,
           overflow: 'hidden',
           width: '100%',
-          // maxWidth: 1200,
           mx: 'auto',
         }}
       >
@@ -110,7 +131,6 @@ export const SaleContainer = () => {
             px: 3.5,
             py: 2.5,
             borderRadius: 0,
-            // borderColor: 'divider',
             '&:hover': { backgroundColor: 'action.hover' },
           }}
         >
@@ -151,13 +171,14 @@ export const SaleContainer = () => {
 
         <SaleMaster
           sales={sales}
-          filterSales={filterSales}
+          filterSales={displayedSales} 
           setFileterSales={setFilterSales}
           loading={loading}
           error={error}
           onCreate={handleToggleCreate}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          onBulkDelete={handleBulkDelete} 
         />
       </Box>
 
@@ -169,8 +190,8 @@ export const SaleContainer = () => {
           onCancel={handleCancel}
         />
       )}
-      <Toaster/>
-      <ScrollTop/>
+      <Toaster />
+      <ScrollTop />
     </Box>
   );
 };

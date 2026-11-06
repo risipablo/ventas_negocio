@@ -55,10 +55,12 @@ class App {
     this.app.use(express.json({ limit: '10mb' }));
     this.app.use(express.urlencoded({ extended: true, limit: '10mb' }));
     this.app.use(cookieParser());
+    
+    
+    this.app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
   }
 
   private routes(): void {
-    
     this.app.use('/api/auth', authRoutes);
     this.app.use('/api/sales', salesRoutes);
     this.app.use('/api/list', listRoutes)
@@ -67,7 +69,7 @@ class App {
     this.app.use('/api/proveedors', proveedoresRoutes)
     this.app.use('/api/carritos', carritoRoutes)
     this.app.use('/api/notas', notaRoutes)
-     this.app.use('/api/archivos', archivoRoutes);
+    this.app.use('/api/archivos', archivoRoutes);
     
     this.app.get('/api/health', (_req: Request, res: Response) => {
       res.json({ status: 'ok', timestamp: new Date().toISOString() });
@@ -82,7 +84,6 @@ class App {
         path: req.path,
       });
     });
-    this.app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
     this.app.use(errorHandler);
 
