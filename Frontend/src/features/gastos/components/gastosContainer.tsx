@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { CheckCircle, XCircle, Pencil, Trash2 } from 'lucide-react';
 import type { IGasto } from '../types/gastos.types';
 import { ModalConfirm } from '../../../components/ui/modalConfirm';
@@ -10,7 +10,6 @@ import { formatDate } from '../../sales/utils/dateUtils';
 const ITEMS_PER_PAGE = 8;
 const money = (n: number) => `$${n.toLocaleString('es-AR')}`;
 const cap = (s: string) => s.toUpperCase();
-
 
 interface Props {
   list: IGasto[];
@@ -31,8 +30,15 @@ export const GastoContainer = ({ list, loading, onDelete, onUpdate, onEdit }: Pr
     return () => clearTimeout(timer);
   }, []);
 
-  const totalPages = Math.ceil(list.length / ITEMS_PER_PAGE);
-  const currentList = list.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  
+  const sortedList = useMemo(() => {
+    return [...list].sort(
+      (a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime()
+    );
+  }, [list]);
+
+  const totalPages = Math.ceil(sortedList.length / ITEMS_PER_PAGE);
+  const currentList = sortedList.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   const handleTogglePago = (gasto: IGasto) => {
     const isPagando = gasto.estado !== 'pagado';
@@ -55,7 +61,7 @@ export const GastoContainer = ({ list, loading, onDelete, onUpdate, onEdit }: Pr
       {isLoading ? (
         <div style={{ padding: '4rem 0', textAlign: 'center' }}><LogoSpinner /></div>
       ) : list.length === 0 ? (
-        <p>No hay gastos registrados.</p>
+        <p>No se encontraron gastos con los filtros aplicados.</p>
       ) : (
         <>
           <div className="table-scroll">

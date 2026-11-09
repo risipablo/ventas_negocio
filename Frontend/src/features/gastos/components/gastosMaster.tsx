@@ -17,19 +17,20 @@ import { useStatsGastos } from '../hooks/useStatsGastos';
 export const GastoMaster = () => {
   const { gastos, loading, addGasto, updateGasto, deleteGasto } = useGastos();
   
-  const { lastSaleProduct, totalMonto } = useStatsGastos(gastos, gastos);
+  // El hook ahora maneja bien el array filtrado
+  const [filteredGastos, setFilteredGastos] = useState<IGasto[]>([]);
+  const { lastSaleProduct, totalMonto } = useStatsGastos(gastos, filteredGastos);
   
   const { query, setQuery, results } = useSearch<IGasto>(gastos, ['proveedor', 'numeroBoleta', 'estado','fecha','fechaPago','monto']);
   
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<IGasto | null>(null);
-  
-  const [filteredGastos, setFilteredGastos] = useState<IGasto[]>([]);
 
   const handleAdd = async (data: Omit<IGasto, '_id'>) => {
     await addGasto(data);
   };
 
+  // Lógica para combinar búsqueda y filtros
   const displayList = query.trim() 
     ? results 
     : (filteredGastos.length > 0 ? filteredGastos : gastos);
@@ -41,14 +42,10 @@ export const GastoMaster = () => {
         <GastoForm isOpen={isFormOpen} onToggle={() => setIsFormOpen(!isFormOpen)} onAdd={handleAdd} />
 
         <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'flex-end' }}>
-          <SearchInput onSearch={setQuery} 
-            loading={loading}  placeholder="Buscar proveedor o boleta..." />
+          <SearchInput onSearch={setQuery} loading={loading} placeholder="Buscar proveedor o boleta..." />
         </div>
 
-        <FilterGastos 
-          gastos={gastos}
-          setFilteredGastos={setFilteredGastos}
-        />
+        <FilterGastos gastos={gastos} setFilteredGastos={setFilteredGastos} />
 
         <GastosStats
           lastSpend={lastSaleProduct}
@@ -69,13 +66,7 @@ export const GastoMaster = () => {
         />
       </Box>
 
-      <EditGastoModal
-        isOpen={!!editingItem}
-        item={editingItem}
-        onClose={() => setEditingItem(null)}
-        onUpdate={updateGasto}
-      />
-      
+      <EditGastoModal isOpen={!!editingItem} item={editingItem} onClose={() => setEditingItem(null)} onUpdate={updateGasto} />
       <Toaster />
       <ScrollTop />
     </Box>

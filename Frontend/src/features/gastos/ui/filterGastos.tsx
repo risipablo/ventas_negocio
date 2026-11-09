@@ -10,18 +10,12 @@ interface Props {
 }
 
 const MONTHS = [
-  { value: '01', label: 'Enero' },
-  { value: '02', label: 'Febrero' },
-  { value: '03', label: 'Marzo' },
-  { value: '04', label: 'Abril' },
-  { value: '05', label: 'Mayo' },
-  { value: '06', label: 'Junio' },
-  { value: '07', label: 'Julio' },
-  { value: '08', label: 'Agosto' },
-  { value: '09', label: 'Septiembre' },
-  { value: '10', label: 'Octubre' },
-  { value: '11', label: 'Noviembre' },
-  { value: '12', label: 'Diciembre' },
+  { value: '01', label: 'Enero' }, { value: '02', label: 'Febrero' },
+  { value: '03', label: 'Marzo' }, { value: '04', label: 'Abril' },
+  { value: '05', label: 'Mayo' }, { value: '06', label: 'Junio' },
+  { value: '07', label: 'Julio' }, { value: '08', label: 'Agosto' },
+  { value: '09', label: 'Septiembre' }, { value: '10', label: 'Octubre' },
+  { value: '11', label: 'Noviembre' }, { value: '12', label: 'Diciembre' },
 ];
 
 export const FilterGastos = ({ gastos, setFilteredGastos }: Props) => {
@@ -31,7 +25,6 @@ export const FilterGastos = ({ gastos, setFilteredGastos }: Props) => {
   const [providerFilter, setProviderFilter] = useState('');
   const [conditionFilter, setConditionFilter] = useState('');
 
-  
   const years = useMemo(() => {
     const set = new Set<string>();
     gastos.forEach((g) => {
@@ -42,13 +35,11 @@ export const FilterGastos = ({ gastos, setFilteredGastos }: Props) => {
     return Array.from(set).sort((a, b) => b.localeCompare(a));
   }, [gastos]);
 
-  
   const uniqueProviders = useMemo(() => {
     return Array.from(new Set(gastos.map((g) => g.proveedor)));
   }, [gastos]);
 
-
-  const filteredSales = useMemo(() => {
+  const filteredGastos = useMemo(() => {
     return gastos.filter((gasto) => {
       const dateStr = typeof gasto.fecha === 'object' ? gasto.fecha : gasto.fecha;
       const [year, month, day] = dateStr.split('T')[0].split('-');
@@ -73,18 +64,16 @@ export const FilterGastos = ({ gastos, setFilteredGastos }: Props) => {
 
   const showCurrentMonth = () => {
     const fecha = new Date();
-    const mesNumero = String(fecha.getMonth() + 1).padStart(2, '0');
-    const año = String(fecha.getFullYear());
-    setMonthFilter(mesNumero);
-    setYearFilter(año);
+    setMonthFilter(String(fecha.getMonth() + 1).padStart(2, '0'));
+    setYearFilter(String(fecha.getFullYear()));
     setDateFilter('');
     setProviderFilter('');
     setConditionFilter('');
   };
 
   useEffect(() => {
-    setFilteredGastos(filteredSales);
-  }, [filteredSales, setFilteredGastos]);
+    setFilteredGastos(filteredGastos);
+  }, [filteredGastos, setFilteredGastos]);
 
   const hasActiveFilters = Boolean(
     dateFilter || monthFilter || yearFilter || providerFilter || conditionFilter
@@ -93,28 +82,16 @@ export const FilterGastos = ({ gastos, setFilteredGastos }: Props) => {
   return (
     <div className="filter-sales">
       <div className="svg-filter">
-          <button
-            type="button"
-            className="filter-sales__current-date"
-            onClick={showCurrentMonth}
-            title="Ver mes actual"
-          >
-              <Tooltip title='Ver Mes Actual'>
-                  <CalendarDays size={18} />
-              </Tooltip>
-            
-    
-          </button>
-        </div>
-        
+        <button type="button" className="filter-sales__current-date" onClick={showCurrentMonth} title="Ver mes actual">
+          <Tooltip title="Ver Mes Actual">
+            <CalendarDays size={18} />
+          </Tooltip>
+        </button>
+      </div>
+      
       <div className="filter-sales__row">
-
         <div className="filter-field">
-          <select
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-            aria-label="Seleccionar Día"
-          >
+          <select value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} aria-label="Seleccionar Día">
             <option value="">Seleccionar Día</option>
             {Array.from({ length: 31 }, (_, i) => {
               const day = String(i + 1).padStart(2, '0');
@@ -124,57 +101,32 @@ export const FilterGastos = ({ gastos, setFilteredGastos }: Props) => {
           <ChevronDown size={16} className="filter-field__icon" />
         </div>
 
-        
         <div className="filter-field">
-          <select
-            value={monthFilter}
-            onChange={(e) => setMonthFilter(e.target.value)}
-            aria-label="Seleccionar Mes"
-          >
+          <select value={monthFilter} onChange={(e) => setMonthFilter(e.target.value)} aria-label="Seleccionar Mes">
             <option value="">Seleccionar Mes</option>
-            {MONTHS.map((m) => (
-              <option key={m.value} value={m.value}>{m.label}</option>
-            ))}
+            {MONTHS.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}
           </select>
           <ChevronDown size={16} className="filter-field__icon" />
         </div>
 
-        
         <div className="filter-field">
-          <select
-            value={yearFilter}
-            onChange={(e) => setYearFilter(e.target.value)}
-            aria-label="Seleccionar Año"
-          >
+          <select value={yearFilter} onChange={(e) => setYearFilter(e.target.value)} aria-label="Seleccionar Año">
             <option value="">Seleccionar Año</option>
-            {years.map((y) => (
-              <option key={y} value={y}>{y}</option>
-            ))}
+            {years.map((y) => <option key={y} value={y}>{y}</option>)}
           </select>
           <ChevronDown size={16} className="filter-field__icon" />
         </div>
 
-        
         <div className="filter-field">
-          <select
-            value={providerFilter}
-            onChange={(e) => setProviderFilter(e.target.value)}
-            aria-label="Seleccionar Proveedor"
-          >
+          <select value={providerFilter} onChange={(e) => setProviderFilter(e.target.value)} aria-label="Seleccionar Proveedor">
             <option value="">Seleccionar Proveedor</option>
-            {uniqueProviders.map((prov) => (
-              <option key={prov} value={prov}>{prov}</option>
-            ))}
+            {uniqueProviders.map((prov) => <option key={prov} value={prov}>{prov.toUpperCase()}</option>)}
           </select>
           <ChevronDown size={16} className="filter-field__icon" />
         </div>
         
         <div className="filter-field">
-          <select
-            value={conditionFilter}
-            onChange={(e) => setConditionFilter(e.target.value)}
-            aria-label="Seleccionar Estado"
-          >
+          <select value={conditionFilter} onChange={(e) => setConditionFilter(e.target.value)} aria-label="Seleccionar Estado">
             <option value="">Seleccionar Estado</option>
             <option value="pagado">Pagado</option>
             <option value="impago">Impago</option>
@@ -183,14 +135,7 @@ export const FilterGastos = ({ gastos, setFilteredGastos }: Props) => {
           <ChevronDown size={16} className="filter-field__icon" />
         </div>
         
-        <button
-          type="button"
-          className="filter-sales__reset"
-          onClick={clearFilters}
-          disabled={!hasActiveFilters}
-          aria-label="Limpiar filtros"
-          title="Limpiar filtros"
-        >
+        <button type="button" className="filter-sales__reset" onClick={clearFilters} disabled={!hasActiveFilters} aria-label="Limpiar filtros">
           <X size={18} />
         </button>
       </div>
